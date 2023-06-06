@@ -1,8 +1,12 @@
 package com.example.demo.models;
 
-import jakarta.persistence.*;
 
+
+import com.example.demo.utils.annotations.PhoneNumber;
+
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 /**
  * Сущность для БД
@@ -19,6 +23,7 @@ public class User {
     private LocalDate birthDate;
     @Column(unique = true)
     private String email;
+    @PhoneNumber
     private String phone;
     @Lob
     private byte[] photo;
@@ -85,5 +90,19 @@ public class User {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", birthDate=" + birthDate +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", photo=" + Arrays.toString(photo) +
+                '}';
     }
 }

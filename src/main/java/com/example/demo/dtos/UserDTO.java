@@ -1,5 +1,7 @@
 package com.example.demo.dtos;
 
+import com.example.demo.utils.annotations.PhoneNumber;
+
 import java.time.LocalDate;
 
 /**
@@ -12,6 +14,7 @@ public class UserDTO {
     private String middleName;
     private LocalDate birthDate;
     private String email;
+    @PhoneNumber
     private String phone;
     private byte[] photo;
 

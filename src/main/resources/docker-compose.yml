@@ -1,0 +1,12 @@
+version: "3"
+services:
+  localPostgres:
+    image: postgres:alpine3.18
+    environment:
+      POSTGRES_DB: "users"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432

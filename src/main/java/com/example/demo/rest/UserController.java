@@ -3,10 +3,11 @@ package com.example.demo.rest;
 import com.example.demo.dtos.UserDTO;
 import com.example.demo.models.User;
 import com.example.demo.services.UserService;
+import com.example.demo.utils.UserMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Класс контроллер отвечающий за ответы api
@@ -15,30 +16,37 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
+    @Operation(summary = "Finds a user by ID.")
     @GetMapping("/{id}")
     public UserDTO findById(@PathVariable Long id) {
         User user = userService.findById(id);
-        return convertToDto(user);
+        return userMapper.toUserDTO(user);
     }
 
+
+    @Operation(summary = "Finds all users.")
     @GetMapping
     public List<UserDTO> findAll() {
         List<User> users = userService.findAll();
-        return users.stream().map(this::convertToDto).collect(Collectors.toList());
+        return userMapper.toUserDTOs(users);
     }
 
+    @Operation(summary = "Creates a new user.")
     @PostMapping
     public UserDTO create(@RequestBody UserDTO userDTO) {
-        User user = convertToEntity(userDTO);
+        User user = userMapper.toUser(userDTO);
         user = userService.save(user);
-        return convertToDto(user);
+        return userMapper.toUserDTO(user);
     }
 
+    @Operation(summary = "Updates an existing user.")
     @PutMapping("/{id}")
     public UserDTO update(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         User user = userService.findById(id);
@@ -50,15 +58,17 @@ public class UserController {
         user.setPhone(userDTO.getPhone());
         user.setPhoto(userDTO.getPhoto());
         user = userService.save(user);
-        return convertToDto(user);
+        return userMapper.toUserDTO(user);
     }
 
+    @Operation(summary = "Deletes a user by ID.")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         userService.deleteById(id);
     }
 
     //Служебные классы, при желании можно вынести отдельно  реалзовать как статичные методы
+    @Deprecated
     private UserDTO convertToDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
@@ -72,6 +82,7 @@ public class UserController {
         return userDTO;
     }
 
+    @Deprecated
     private User convertToEntity(UserDTO userDTO) {
         User user = new User();
         user.setId(userDTO.getId());

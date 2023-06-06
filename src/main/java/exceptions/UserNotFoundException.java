@@ -7,6 +7,6 @@ public class UserNotFoundException extends RuntimeException{
     private static final Logger log = LoggerFactory.getLogger(UserNotFoundException.class);
     public UserNotFoundException(String message) {
         super(message);
-        log.info("Ппользователь с с ID {} не найден", message);
+        log.warn("Пользователь с с ID {} не найден", message);
     }
 }
