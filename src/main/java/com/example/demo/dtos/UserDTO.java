@@ -3,6 +3,8 @@ package com.example.demo.dtos;
 import com.example.demo.utils.annotations.PhoneNumber;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * дто для взаимодействия с внешними сервисами (тут как таковой избыточен)
@@ -80,5 +82,34 @@ public class UserDTO {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(id, userDTO.id) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(firstName, userDTO.firstName) && Objects.equals(middleName, userDTO.middleName) && Objects.equals(birthDate, userDTO.birthDate) && Objects.equals(email, userDTO.email) && Objects.equals(phone, userDTO.phone) && Arrays.equals(photo, userDTO.photo);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone);
+        result = 31 * result + Arrays.hashCode(photo);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", birthDate=" + birthDate +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", photo=" + Arrays.toString(photo) +
+                '}';
     }
 }

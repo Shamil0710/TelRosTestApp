@@ -24,45 +24,63 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void save() {
+    void givenUser_whenSave_thenUserIsSaved() {
 
-        User user = this.buildTestingUser();
+        // Given
+        User user = buildUser();
 
-        this.userService.save(user);
+        // When
+        userService.save(user);
 
-        Mockito.verify(this.userRepository).save(user);
+        // Then
+        Mockito.verify(userRepository).save(user);
     }
 
     @Test
-    void findById() {
-        User user = this.buildTestingUser();
+    void givenId_whenFindById_thenUserIsFound() {
 
+        // Given
+        User user = buildUser();
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        User returnedUser = this.userService.findById(1L);
-        assertEquals(user.getId(), returnedUser.getId());
 
-        Mockito.verify(this.userRepository).findById(1L);
+        // When
+        User returnedUser = userService.findById(1L);
+
+        // Then
+        assertEquals(user, returnedUser);
+
+        Mockito.verify(userRepository).findById(1L);
     }
 
     @Test
-    void findAll() {
-        User user = this.buildTestingUser();
+    void givenNoUsers_whenFindAll_thenEmptyListIsReturned() {
 
-        Mockito.when(userRepository.findAll()).thenReturn(List.of(user));
-        List<User> users = this.userService.findAll();
+        // Given
+        Mockito.when(userRepository.findAll()).thenReturn(List.of());
 
-        assertEquals(1, users.size());
-        Mockito.verify(this.userRepository).findAll();
+        // When
+        List<User> users = userService.findAll();
+
+        // Then
+        assertEquals(0, users.size());
+
+        Mockito.verify(userRepository).findAll();
     }
 
     @Test
-    void deleteById() {
-        this.userService.deleteById(1L);
+    void givenUserId_whenDeleteById_thenUserIsDeleted() {
 
-        Mockito.verify(this.userRepository).deleteById(1L);
+        // Given
+        User user = buildUser();
+
+        // When
+        userService.deleteById(1L);
+
+        // Then
+        Mockito.verify(userRepository).deleteById(1L);
     }
 
-    private User buildTestingUser() {
+    private User buildUser() {
         User user = new User();
         user.setId(1L);
         user.setFirstName("John");

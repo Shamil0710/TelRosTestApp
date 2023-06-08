@@ -7,6 +7,7 @@ import com.example.demo.utils.annotations.PhoneNumber;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Сущность для БД
@@ -104,5 +105,20 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", photo=" + Arrays.toString(photo) +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName) && Objects.equals(firstName, user.firstName) && Objects.equals(middleName, user.middleName) && Objects.equals(birthDate, user.birthDate) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone) && Arrays.equals(photo, user.photo);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone);
+        result = 31 * result + Arrays.hashCode(photo);
+        return result;
     }
 }

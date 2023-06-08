@@ -5,6 +5,11 @@ import com.example.demo.models.User;
 import com.example.demo.services.UserService;
 import com.example.demo.utils.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +29,10 @@ public class UserController {
     }
 
     @Operation(summary = "Finds a user by ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The user was found.",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "The user was not found.")})
     @GetMapping("/{id}")
     public UserDTO findById(@PathVariable Long id) {
         User user = userService.findById(id);
@@ -32,13 +41,23 @@ public class UserController {
 
 
     @Operation(summary = "Finds all users.")
-    @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The users were found.",
+                    content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))}),
+            @ApiResponse(responseCode = "404", description = "No users were found.")
+    })
+    @GetMapping()
     public List<UserDTO> findAll() {
         List<User> users = userService.findAll();
         return userMapper.toUserDTOs(users);
     }
 
     @Operation(summary = "Creates a new user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The user was created.",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))}),
+            @ApiResponse(responseCode = "400", description = "The request body is invalid.")
+    })
     @PostMapping
     public UserDTO create(@RequestBody UserDTO userDTO) {
         User user = userMapper.toUser(userDTO);
@@ -47,21 +66,22 @@ public class UserController {
     }
 
     @Operation(summary = "Updates an existing user.")
-    @PutMapping("/{id}")
-    public UserDTO update(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        User user = userService.findById(id);
-        user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setMiddleName(userDTO.getMiddleName());
-        user.setBirthDate(userDTO.getBirthDate());
-        user.setPhone(userDTO.getPhone());
-        user.setPhoto(userDTO.getPhoto());
-        user = userService.save(user);
-        return userMapper.toUserDTO(user);
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The user was updated."),
+            @ApiResponse(responseCode = "400", description = "The request body is invalid."),
+            @ApiResponse(responseCode = "404", description = "The user was not found.")
+    })
+    @PutMapping("/update")
+    public void update(@RequestBody UserDTO userDTO) {
+        userService.updateUserFromDto(userDTO);
     }
 
     @Operation(summary = "Deletes a user by ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The user was deleted."),
+            @ApiResponse(responseCode = "400", description = "The request body is invalid."),
+            @ApiResponse(responseCode = "404", description = "The user was not found.")
+    })
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         userService.deleteById(id);

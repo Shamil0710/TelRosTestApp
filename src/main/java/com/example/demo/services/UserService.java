@@ -1,7 +1,9 @@
 package com.example.demo.services;
 
 import com.example.demo.UserRepository;
+import com.example.demo.dtos.UserDTO;
 import com.example.demo.models.User;
+import com.example.demo.utils.UserMapper;
 import exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +18,11 @@ import java.util.List;
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     public User save(User user) {
@@ -43,6 +47,15 @@ public class UserService {
         log.info("Удаление пользователя по id: {}", id);
 
         userRepository.deleteById(id);
+    }
+
+    public void updateUserFromDto(UserDTO dto) {
+        log.info("Обновление пользователя: {}", dto);
+
+        User user = userRepository.findById(dto.getId())
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден: " + dto.toString()));
+        userMapper.updateUserFromDto(dto, user);
+        userRepository.save(user);
     }
 
 }

@@ -2,7 +2,7 @@ package com.example.demo.utils;
 
 import com.example.demo.dtos.UserDTO;
 import com.example.demo.models.User;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -18,4 +18,7 @@ public interface UserMapper {
     User toUser(UserDTO userDTO);
 
     List<User> toUsers(List<UserDTO> userDTOs);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateUserFromDto(UserDTO userDTO, @MappingTarget User userEntity);
 }
