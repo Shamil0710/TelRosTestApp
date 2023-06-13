@@ -133,9 +133,7 @@ class UserControllerTest {
         userDto.setLastName("Doe");
         userDto.setFirstName("John");
 
-        Mockito.when(userService.save(user)).thenReturn(user);
-
-        mockMvc.perform(post("/api/users/update")
+        mockMvc.perform(put("/api/users/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk());
