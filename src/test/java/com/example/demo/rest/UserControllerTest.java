@@ -3,190 +3,154 @@ package com.example.demo.rest;
 import com.example.demo.dtos.UserDTO;
 import com.example.demo.models.User;
 import com.example.demo.services.UserService;
+import com.example.demo.utils.UserMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ComponentScan(basePackages = {"com.example"})
-@SpringBootTest
-@AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 class UserControllerTest {
 
+    private MockMvc mockMvc;
+
+    private ObjectMapper objectMapper;
+    @Mock
+    private UserService userService;
+    @Mock
+    private UserMapper userMapper;
     @InjectMocks
     private UserController userController;
 
-    @Mock
-    private UserService userService;
-
-//    @Mock
-//    private UserService userService;
-//
-//    @Autowired
-//    private MockMvc mockMvc;
-
-    @Test
-    void findById_userExists_returnsUser() {
-        // Given
-        Long id = 1L;
-        User user = new User();
-        user.setId(id);
-
-        // When
-        UserDTO userDTO = userController.findById(id);
-
-        // Then
-        assertEquals(id, userDTO.getId());
+    @BeforeEach
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        objectMapper = new ObjectMapper();
+//        userService = Mockito.mock(UserService.class);
     }
 
     @Test
-    void findById_userDoesNotExist_throwsNotFoundException() {
-        // Given
-        Long id = 1L;
+    public void whenGetAllUsers_thenAllUsersReturned() throws Exception {
+        User user1 = new User();
+        user1.setId(1L);
+        user1.setLastName("Doe");
+        user1.setFirstName("John");
+        List<User> users = Collections.singletonList(user1);
 
-        // When
-        assertThrows(ChangeSetPersister.NotFoundException.class, () -> userController.findById(id));
-    }
-
-    @Test
-    void findAll_usersExist_returnsListOfUsers() {
-        // Given
-        List<User> users = Arrays.asList(new User(), new User());
-
-        // When
-        List<UserDTO> userDTOs = userController.findAll();
-
-        // Then
-        assertEquals(2, userDTOs.size());
-    }
-
-    @Test
-    void findAll_noUsersExist_returnsEmptyList() {
-        // Given
-        List<User> users = Collections.emptyList();
-
-        // When
-        List<UserDTO> userDTOs = userController.findAll();
-
-        // Then
-        assertTrue(userDTOs.isEmpty());
-    }
-
-    @Test
-    void create_userIsValid_returnsUser() {
-        // Given
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName("John");
-        userDTO.setLastName("Doe");
-        userDTO.setEmail("johndoe@example.com");
-
-        // When
-        UserDTO createdUserDTO = userController.create(userDTO);
-
-        // Then
-        assertEquals(userDTO.getFirstName(), createdUserDTO.getFirstName());
-        assertEquals(userDTO.getLastName(), createdUserDTO.getLastName());
-        assertEquals(userDTO.getEmail(), createdUserDTO.getEmail());
-    }
-
-    @Test
-    void create_userIsInvalid_throwsBadRequestException() {
-        // Given
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(null);
-
-        // When
-        assertThrows(HttpClientErrorException.BadRequest.class, () -> userController.create(userDTO));
-    }
-
-    @Test
-    void update_userIsValid_updatesUser() {
-        // Given
-        User user = new User();
-        user.setId(1L);
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setEmail("johndoe@example.com");
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setFirstName("Jane");
-
-        // When
-        userController.update(userDTO);
-
-        // Then
-        assertEquals(userDTO.getFirstName(), user.getFirstName());
-    }
-
-    @Test
-    void update_userIsInvalid_throwsBadRequestException() {
-        // Given
         UserDTO userDTO = new UserDTO();
         userDTO.setId(1L);
-        userDTO.setFirstName(null);
+        userDTO.setLastName("Doe");
+        userDTO.setFirstName("John");
+        List<UserDTO> userDTOS = Collections.singletonList(userDTO);
 
-        // When
-        assertThrows(HttpClientErrorException.BadRequest.class, () -> userController.update(userDTO));
+        Mockito.when(userMapper.toUserDTOs(any())).thenReturn(userDTOS);
+
+        mockMvc.perform(get("/api/users")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(objectMapper.writeValueAsString(users)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        verify(userService).findAll();
     }
-
 
     @Test
-    void deleteById_userExists_deletesUser() {
-        // Given
-        User user = new User();
-        user.setId(1L);
-        userService.save(user);
+    public void whenGetOneUser_thenOneUserReturned() throws Exception {
+        UserDTO userDto = new UserDTO();
+        userDto.setId(1L);
+        userDto.setLastName("Doe");
+        userDto.setFirstName("John");
 
-        // When
-        userController.deleteById(user.getId());
-
-        // Then
-        assertEquals(userService.findById(user.getId()), is(nullValue()));
-    }
-
-    private User buildUser() {
         User user = new User();
         user.setId(1L);
         user.setFirstName("John");
         user.setLastName("Doe");
 
-        return user;
+        Mockito.when(userService.findById(1L)).thenReturn(user);
+        Mockito.when(userMapper.toUserDTO(any())).thenReturn(userDto);
+
+        mockMvc.perform(get("/api/users/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isOk());
+
+        verify(userService).findById(1L);
     }
 
-    private UserDTO buildUserDto() {
+    @Test
+    public void whenSaveUser_thenUserSaved() throws Exception {
+        User user = new User();
+        user.setId(1L);
+        user.setLastName("Doe");
+        user.setFirstName("John");
+
         UserDTO userDto = new UserDTO();
         userDto.setId(1L);
-        userDto.setFirstName("John");
         userDto.setLastName("Doe");
+        userDto.setFirstName("John");
 
-        return userDto;
+        Mockito.when(userMapper.toUserDTO(any())).thenReturn(userDto);
+
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isOk());
+
+        verify(userMapper).toUser(userDto);
+    }
+
+    @Test
+    public void whenEditUser_thenUserFound() throws Exception {
+        User user = new User();
+        user.setId(1L);
+        user.setLastName("Doe");
+        user.setFirstName("John");
+
+        UserDTO userDto = new UserDTO();
+        userDto.setId(1L);
+        userDto.setLastName("Doe");
+        userDto.setFirstName("John");
+
+        Mockito.when(userService.save(user)).thenReturn(user);
+
+        mockMvc.perform(post("/api/users/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isOk());
+
+        verify(userService).updateUserFromDto(userDto);
+    }
+
+    @Test
+    public void whenDeleteUser_thenUserDeleted() throws Exception {
+        Mockito.doNothing().when(userService).deleteById(1L);
+
+        mockMvc.perform(delete("/api/users/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(userService).deleteById(1L);
     }
 }

@@ -26,8 +26,6 @@ public class User {
     private String email;
     @PhoneNumber
     private String phone;
-    @Lob
-    private byte[] photo;
 
     public Long getId() {
         return id;
@@ -85,12 +83,17 @@ public class User {
         this.phone = phone;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName) && Objects.equals(firstName, user.firstName) && Objects.equals(middleName, user.middleName) && Objects.equals(birthDate, user.birthDate) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone);
     }
 
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone);
     }
 
     @Override
@@ -103,22 +106,6 @@ public class User {
                 ", birthDate=" + birthDate +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", photo=" + Arrays.toString(photo) +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName) && Objects.equals(firstName, user.firstName) && Objects.equals(middleName, user.middleName) && Objects.equals(birthDate, user.birthDate) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone) && Arrays.equals(photo, user.photo);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone);
-        result = 31 * result + Arrays.hashCode(photo);
-        return result;
     }
 }

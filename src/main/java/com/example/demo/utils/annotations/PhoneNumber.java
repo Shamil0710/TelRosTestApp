@@ -10,6 +10,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {PhoneNumberValidator.class})
 public @interface PhoneNumber {
+    String message() default "Phone Number does not match";
 
     Class<?>[] groups() default {};
 

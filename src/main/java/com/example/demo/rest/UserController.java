@@ -98,7 +98,6 @@ public class UserController {
         userDTO.setBirthDate(user.getBirthDate());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhone(user.getPhone());
-        userDTO.setPhoto(user.getPhoto());
         return userDTO;
     }
 
@@ -112,7 +111,6 @@ public class UserController {
         user.setBirthDate(userDTO.getBirthDate());
         user.setEmail(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
-        user.setPhoto(userDTO.getPhoto());
         return user;
     }
 }

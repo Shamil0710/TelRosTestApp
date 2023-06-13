@@ -18,7 +18,7 @@ public class UserDTO {
     private String email;
     @PhoneNumber
     private String phone;
-    private byte[] photo;
+//    private byte[] photo;
 
     public Long getId() {
         return id;
@@ -76,27 +76,17 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public byte[] getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(id, userDTO.id) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(firstName, userDTO.firstName) && Objects.equals(middleName, userDTO.middleName) && Objects.equals(birthDate, userDTO.birthDate) && Objects.equals(email, userDTO.email) && Objects.equals(phone, userDTO.phone) && Arrays.equals(photo, userDTO.photo);
+        return Objects.equals(id, userDTO.id) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(firstName, userDTO.firstName) && Objects.equals(middleName, userDTO.middleName) && Objects.equals(birthDate, userDTO.birthDate) && Objects.equals(email, userDTO.email) && Objects.equals(phone, userDTO.phone);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone);
-        result = 31 * result + Arrays.hashCode(photo);
-        return result;
+        return Objects.hash(id, lastName, firstName, middleName, birthDate, email, phone);
     }
 
     @Override
@@ -109,7 +99,14 @@ public class UserDTO {
                 ", birthDate=" + birthDate +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", photo=" + Arrays.toString(photo) +
                 '}';
     }
+
+//    public byte[] getPhoto() {
+//        return photo;
+//    }
+//
+//    public void setPhoto(byte[] photo) {
+//        this.photo = photo;
+//    }
 }
