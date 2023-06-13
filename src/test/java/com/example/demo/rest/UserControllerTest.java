@@ -11,20 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -101,11 +97,6 @@ class UserControllerTest {
 
     @Test
     public void whenSaveUser_thenUserSaved() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setLastName("Doe");
-        user.setFirstName("John");
-
         UserDTO userDto = new UserDTO();
         userDto.setId(1L);
         userDto.setLastName("Doe");
@@ -115,7 +106,7 @@ class UserControllerTest {
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
+                .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk());
 
         verify(userMapper).toUser(userDto);
@@ -123,11 +114,6 @@ class UserControllerTest {
 
     @Test
     public void whenEditUser_thenUserFound() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setLastName("Doe");
-        user.setFirstName("John");
-
         UserDTO userDto = new UserDTO();
         userDto.setId(1L);
         userDto.setLastName("Doe");
@@ -135,7 +121,7 @@ class UserControllerTest {
 
         mockMvc.perform(put("/api/users/update")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
+                .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk());
 
         verify(userService).updateUserFromDto(userDto);
