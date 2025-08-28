@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Класс контроллер отвечающий за ответы api
+ * Класс контроллер отвечающий за ответы API
  */
 @RestController
 @RequestMapping("/api/users")
@@ -87,7 +87,7 @@ public class UserController {
         userService.deleteById(id);
     }
 
-    //Служебные классы, при желании можно вынести отдельно  реалзовать как статичные методы
+    //Служебные классы, при желании можно вынести отдельно и реализовать как статичные методы
     @Deprecated
     private UserDTO convertToDto(User user) {
         UserDTO userDTO = new UserDTO();

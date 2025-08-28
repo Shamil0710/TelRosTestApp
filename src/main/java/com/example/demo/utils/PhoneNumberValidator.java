@@ -7,6 +7,9 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Служебный класс необходимый для валидации телефонного номера
+ */
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 
     @Override

@@ -10,6 +10,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * Конфигурации документирования OpenAPI
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -25,7 +28,7 @@ public class SwaggerConfig {
     @Bean
     public ApiInfo apiInfo() {
         final ApiInfoBuilder builder = new ApiInfoBuilder();
-        builder.title("API");
+        builder.title("TEST-API");
 
         return builder.build();
     }

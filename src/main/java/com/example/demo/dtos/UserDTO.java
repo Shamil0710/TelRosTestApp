@@ -18,7 +18,6 @@ public class UserDTO {
     private String email;
     @PhoneNumber
     private String phone;
-//    private byte[] photo;
 
     public Long getId() {
         return id;
@@ -101,12 +100,4 @@ public class UserDTO {
                 ", phone='" + phone + '\'' +
                 '}';
     }
-
-//    public byte[] getPhoto() {
-//        return photo;
-//    }
-//
-//    public void setPhoto(byte[] photo) {
-//        this.photo = photo;
-//    }
 }

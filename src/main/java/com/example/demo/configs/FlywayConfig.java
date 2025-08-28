@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+/**
+ * Конфигурационный класс для мигратора Flyway
+ */
 @Configuration
 public class FlywayConfig {
     @Value("${spring.jpa.properties.hibernate.dialect}")

@@ -2,7 +2,7 @@ package com.example.demo.rest;
 
 import com.example.demo.dtos.UserDTO;
 import com.example.demo.models.User;
-import com.example.demo.services.UserService;
+import com.example.demo.services.UserServiceImp;
 import com.example.demo.utils.UserMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ class UserControllerTest {
 
     private ObjectMapper objectMapper;
     @Mock
-    private UserService userService;
+    private UserServiceImp userService;
     @Mock
     private UserMapper userMapper;
     @InjectMocks

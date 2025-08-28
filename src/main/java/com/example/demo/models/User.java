@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Сущность для БД
+ * Сущность для "Пользователь" БД
  */
 @Entity
 @Table(name = "users")
@@ -88,7 +88,10 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName) && Objects.equals(firstName, user.firstName) && Objects.equals(middleName, user.middleName) && Objects.equals(birthDate, user.birthDate) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone);
+        return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName)
+                && Objects.equals(firstName, user.firstName) && Objects.equals(middleName, user.middleName)
+                && Objects.equals(birthDate, user.birthDate) && Objects.equals(email, user.email)
+                && Objects.equals(phone, user.phone);
     }
 
     @Override
