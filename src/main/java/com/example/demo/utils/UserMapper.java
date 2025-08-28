@@ -6,18 +6,17 @@ import org.mapstruct.*;
 
 import java.util.List;
 
+/**
+ * Маппер ответственный за преобразование сущностей
+ */
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
-
-//    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     UserDTO toUserDTO(User user);
 
     List<UserDTO> toUserDTOs(List<User> users);
 
     User toUser(UserDTO userDTO);
-
-    List<User> toUsers(List<UserDTO> userDTOs);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromDto(UserDTO userDTO, @MappingTarget User userEntity);

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * интерфейс репозиторий для работы с базой данных
+ * Интерфейс репозиторий для работы с базой данных
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

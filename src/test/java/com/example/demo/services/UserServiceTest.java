@@ -21,7 +21,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImp userService;
 
     @Test
     void givenUser_whenSave_thenUserIsSaved() {
